@@ -2,6 +2,7 @@ package com.lambdaschool.usermodel.services;
 
 import com.lambdaschool.usermodel.models.Role;
 import com.lambdaschool.usermodel.models.User;
+import com.lambdaschool.usermodel.models.UserRoles;
 import com.lambdaschool.usermodel.models.Useremail;
 import com.lambdaschool.usermodel.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,14 +100,13 @@ public class UserServiceImpl
         newUser.setPrimaryemail(user.getPrimaryemail()
                                         .toLowerCase());
 
-        newUser.getRoles()
-                .clear();
-        for (Role r : user.getRoles())
+        newUser.getRoles().clear();
+        for (UserRoles r : user.getRoles())
         {
-            Role newRole = roleService.findRoleById(r.getRoleid());
+            Role newRole = roleService.findRoleById(r.getRole().getRoleid());
 
             newUser.getRoles()
-                    .add(newRole);
+                    .add(new UserRoles(newUser, newRole));
         }
 
         newUser.getUseremails()
@@ -129,47 +129,34 @@ public class UserServiceImpl
     {
         User currentUser = findUserById(id);
 
-        if (user.getUsername() != null)
-        {
+        if (user.getUsername() != null) {
             currentUser.setUsername(user.getUsername()
                                             .toLowerCase());
         }
 
-        if (user.getPassword() != null)
-        {
+        if (user.getPassword() != null) {
             currentUser.setPassword(user.getPassword());
         }
 
-        if (user.getPrimaryemail() != null)
-        {
+        if (user.getPrimaryemail() != null) {
             currentUser.setPrimaryemail(user.getPrimaryemail()
                                                 .toLowerCase());
         }
 
-        if (user.getRoles()
-                .size() > 0)
-        {
-            currentUser.getRoles()
-                    .clear();
-            for (Role r : user.getRoles())
-            {
-                Role newRole = roleService.findRoleById(r.getRoleid());
+        if (user.getRoles().size() > 0) {
+            currentUser.getRoles().clear();
+            for (UserRoles r : user.getRoles()) {
+                Role newRole = roleService.findRoleById(r.getRole().getRoleid());
 
-                currentUser.getRoles()
-                        .add(newRole);
+                currentUser.getRoles().add(new UserRoles(currentUser, newRole));
             }
         }
 
-        if (user.getUseremails()
-                .size() > 0)
-        {
-            currentUser.getUseremails()
-                    .clear();
-            for (Useremail ue : user.getUseremails())
-            {
+        if (user.getUseremails().size() > 0) {
+            currentUser.getUseremails().clear();
+            for (Useremail ue : user.getUseremails()) {
                 currentUser.getUseremails()
-                        .add(new Useremail(currentUser,
-                                           ue.getUseremail()));
+                        .add(new Useremail(currentUser, ue.getUseremail()));
             }
         }
 

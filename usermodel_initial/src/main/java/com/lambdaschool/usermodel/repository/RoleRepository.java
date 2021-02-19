@@ -1,7 +1,6 @@
 package com.lambdaschool.usermodel.repository;
 
 import com.lambdaschool.usermodel.models.Role;
-import org.hibernate.type.StringNVarcharType;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -26,6 +25,6 @@ public interface RoleRepository
             "        last_modified_date = CURRENT_TIMESTAMP " +
             "        last_modified_by = :uname " +
             "WHERE roleid = :roleid", nativeQuery = true)
-    void updateRoleName(long roleid, String name, String uname)
+    void updateRoleName(long roleid, String name, String uname);
 
 }
